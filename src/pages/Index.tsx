@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import HeroSection from "@/components/HeroSection";
 import BeforePoll from "@/components/BeforePoll";
 import InteractiveTimeline from "@/components/InteractiveTimeline";
+import VideoSection from "@/components/VideoSection";
 import SecretOperation from "@/components/SecretOperation";
 import WhistleblowerChoice from "@/components/WhistleblowerChoice";
 import AfterPoll from "@/components/AfterPoll";
@@ -52,6 +53,7 @@ const Index = () => {
         
         <div id="content-modules" className="space-y-32">
           <InteractiveTimeline />
+          <VideoSection />
           <SecretOperation />
           <WhistleblowerChoice />
         </div>
