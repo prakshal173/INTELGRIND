@@ -9,6 +9,7 @@ import WhistleblowerChoice from "@/components/WhistleblowerChoice";
 import AfterPoll from "@/components/AfterPoll";
 import ResultsChart from "@/components/ResultsChart";
 import ArchiveSection from "@/components/ArchiveSection";
+import SuggestionsSection from "@/components/SuggestionsSection";
 
 const Index = () => {
   const [beforeAnswers, setBeforeAnswers] = useState<boolean[]>([]);
@@ -49,11 +50,12 @@ const Index = () => {
       <HeroSection />
       
       <div className="container mx-auto px-4 py-16 space-y-32">
+        <VideoSection />
+        
         <BeforePoll onSubmit={handleBeforePollSubmit} />
         
         <div id="content-modules" className="space-y-32">
           <InteractiveTimeline />
-          <VideoSection />
           <SecretOperation />
           <WhistleblowerChoice />
         </div>
@@ -67,6 +69,8 @@ const Index = () => {
         </div>
 
         <ArchiveSection />
+        
+        <SuggestionsSection />
       </div>
     </div>
   );
