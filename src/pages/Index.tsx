@@ -4,8 +4,8 @@ import HeroSection from "@/components/HeroSection";
 import BeforePoll from "@/components/BeforePoll";
 import InteractiveTimeline from "@/components/InteractiveTimeline";
 import VideoSection from "@/components/VideoSection";
-import SecretOperation from "@/components/SecretOperation";
-import WhistleblowerChoice from "@/components/WhistleblowerChoice";
+import RedactionChallenge from "@/components/RedactionChallenge";
+import MoleHunt from "@/components/MoleHunt";
 import AfterPoll from "@/components/AfterPoll";
 import ResultsChart from "@/components/ResultsChart";
 import ArchiveSection from "@/components/ArchiveSection";
@@ -56,8 +56,8 @@ const Index = () => {
         
         <div id="content-modules" className="space-y-32">
           <InteractiveTimeline />
-          <SecretOperation />
-          <WhistleblowerChoice />
+          <RedactionChallenge />
+          <MoleHunt />
         </div>
 
         {beforeAnswers.length > 0 && (
