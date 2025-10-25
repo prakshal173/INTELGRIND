@@ -13,19 +13,19 @@ const MoleHunt = () => {
       case "ben":
         return {
           title: "Correct!",
-          text: "Agent Ben's secret cash purchase is the strongest clue. While Agent Sarah had a motive (unhappy) and Agent Mike had a weakness (debt), only Agent Ben showed evidence of receiving a large, unexplained payment—a classic sign of being a paid spy. This game is based on the real-life case of FBI agent Robert Hanssen.",
+          text: "This was a hard choice, but you thought like a real analyst. Sarah and Mike both had opportunity (they were in the building) and motive/weakness. But in counter-intelligence, you always follow the money. Ben's sudden, large, and unexplained payment (Clue 2) is the strongest piece of hard evidence. His 'casino' story is a common lie to hide payments.",
           isCorrect: true
         };
       case "sarah":
         return {
-          title: "Incorrect",
-          text: "While Agent Sarah had a motive (unhappy), she didn't show evidence of receiving a payment. The strongest clue was Agent Ben's secret cash purchase. This game is based on the real-life case of FBI agent Robert Hanssen.",
+          title: "Incorrect. (A good guess, but...)",
+          text: "Agent Sarah is a classic 'red herring.' She has the strongest motive (anger) and opportunity (she was there). But there is no hard evidence she was paid. The strongest clue is always the money. Agent Ben's sudden $80,000 payment is much more suspicious.",
           isCorrect: false
         };
       case "mike":
         return {
-          title: "Incorrect",
-          text: "While Agent Mike had a weakness (debt), he didn't show evidence of receiving a payment. The strongest clue was Agent Ben's secret cash purchase. This game is based on the real-life case of FBI agent Robert Hanssen.",
+          title: "Incorrect. (A good guess, but...)",
+          text: "Agent Mike is a classic 'red herring.' He has the strongest weakness (debt) and opportunity (he was there). But there is no hard evidence he was paid. The strongest clue is always the money. Agent Ben's sudden $80,000 payment is much more suspicious.",
           isCorrect: false
         };
       default:
@@ -39,10 +39,10 @@ const MoleHunt = () => {
     <section className="py-16 animate-fade-in-up">
       <div className="text-center mb-12">
         <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-          Interactive Module 3: The Mole Hunt
+          The Mole Hunt
         </h2>
         <p className="text-lg text-foreground max-w-3xl mx-auto">
-          Sometimes, the biggest secret is a person. In spy agencies, a "mole" is a traitor on the inside. You are the Spy Chief. Read the clues and find the mole in your agency.
+          Welcome to Counter-Intelligence. A "mole" is a traitor on the inside. You are the Spy Chief. A top-secret file was just leaked. Read the intelligence reports and find the mole. Be careful, analysts who rush to judgment often fail.
         </p>
       </div>
 
@@ -50,31 +50,37 @@ const MoleHunt = () => {
         <Card className="p-8 bg-card border-border shadow-neon">
           <h3 className="text-2xl font-bold mb-4 text-primary">The Scenario</h3>
           <p className="text-lg text-foreground leading-relaxed">
-            A top-secret file on our satellite program was just leaked to an enemy. The leak had to come from one of these three agents. We have gathered some clues.
+            A top-secret file on our satellite program was just leaked to an enemy. The file was stolen from our internal server. We have three suspects and three key pieces of intelligence.
           </p>
         </Card>
 
         <Card className="p-8 bg-card border-border shadow-neon">
-          <h3 className="text-2xl font-bold mb-6 text-primary">The Clues</h3>
+          <h3 className="text-2xl font-bold mb-6 text-primary">The Intelligence Clues</h3>
           <div className="space-y-4">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
                 <span className="text-accent font-bold">1</span>
               </div>
-              <p className="text-lg text-foreground">The mole recently made a large, secret cash purchase.</p>
+              <p className="text-lg text-foreground">The file was downloaded from the server between 1:00 AM and 3:00 AM on Tuesday.</p>
             </div>
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
                 <span className="text-accent font-bold">2</span>
               </div>
-              <p className="text-lg text-foreground">The mole has been complaining about being passed over for a promotion.</p>
+              <p className="text-lg text-foreground">Intelligence suggests the mole received a large, untraceable payment <span className="font-semibold">after</span> the leak.</p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                <span className="text-accent font-bold">3</span>
+              </div>
+              <p className="text-lg text-foreground">The mole has a strong motive or weakness, like anger, debt, or greed.</p>
             </div>
           </div>
         </Card>
 
         <div>
-          <h3 className="text-2xl font-bold mb-6 text-center text-primary">Who is the most likely mole?</h3>
-          <p className="text-center text-muted-foreground mb-6">Click on a suspect to make your choice</p>
+          <h3 className="text-2xl font-bold mb-6 text-center text-primary">Who is the <span className="italic">most likely</span> mole?</h3>
+          <p className="text-center text-muted-foreground mb-6">You must read all three profiles to find the most likely suspect. Click on a card to make your choice.</p>
           
           <div className="grid md:grid-cols-3 gap-6">
             <Card 
@@ -87,9 +93,10 @@ const MoleHunt = () => {
                 </div>
                 <h4 className="text-xl font-bold text-primary">Agent Sarah</h4>
               </div>
-              <p className="text-foreground leading-relaxed">
-                Top of her class. Ambitious, but was recently passed over for a promotion. Lives in a small apartment.
-              </p>
+              <div className="text-foreground leading-relaxed space-y-2">
+                <p><span className="font-semibold text-primary">Motive:</span> Very angry. Was passed over for a promotion she deserved last month.</p>
+                <p><span className="font-semibold text-primary">Activity:</span> Security logs show she was working late on Tuesday. She badged out of the office at <span className="font-semibold">1:30 AM</span>.</p>
+              </div>
             </Card>
 
             <Card 
@@ -102,9 +109,10 @@ const MoleHunt = () => {
                 </div>
                 <h4 className="text-xl font-bold text-accent">Agent Ben</h4>
               </div>
-              <p className="text-foreground leading-relaxed">
-                A quiet, reliable analyst. Never complains, but also just bought a new luxury sports car in cash. Said it was a 'family inheritance.'
-              </p>
+              <div className="text-foreground leading-relaxed space-y-2">
+                <p><span className="font-semibold text-accent">Motive:</span> No known motive.</p>
+                <p><span className="font-semibold text-accent">Activity:</span> His ex-wife's $80,000 alimony debt was suddenly paid off in full on Wednesday. Ben claims he won the money at a casino.</p>
+              </div>
             </Card>
 
             <Card 
@@ -117,9 +125,10 @@ const MoleHunt = () => {
                 </div>
                 <h4 className="text-xl font-bold text-secondary">Agent Mike</h4>
               </div>
-              <p className="text-foreground leading-relaxed">
-                A bit of a gambler. Openly complains about his low pay, but his finances show he is in debt.
-              </p>
+              <div className="text-foreground leading-relaxed space-y-2">
+                <p><span className="font-semibold text-secondary">Motive:</span> Weakness. Known to have a serious gambling problem and is deep in debt.</p>
+                <p><span className="font-semibold text-secondary">Activity:</span> Security logs show he badged <span className="italic">into</span> the office at <span className="font-semibold">2:00 AM</span> on Tuesday, claiming he 'forgot his wallet.'</p>
+              </div>
             </Card>
           </div>
         </div>
@@ -132,20 +141,27 @@ const MoleHunt = () => {
               {result?.title}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <p className="text-foreground leading-relaxed text-lg">
               {result?.text}
             </p>
-            <div className="flex items-center gap-2 text-accent hover:text-accent/80 transition-colors">
-              <ExternalLink className="w-5 h-5" />
-              <a 
-                href="https://www.fbi.gov/history/famous-cases/robert-hanssen" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="underline"
-              >
-                Read more about Robert Hanssen
-              </a>
+            
+            <div className="pt-4 border-t border-border">
+              <h4 className="text-xl font-bold mb-3 text-primary">Counter-Intelligence: The Other Side of Secrecy</h4>
+              <p className="text-foreground leading-relaxed mb-4">
+                Finding a mole is called 'counter-intelligence.' This game is based on the real-life case of <span className="font-semibold">Robert Hanssen</span>, an FBI agent who was a mole for Russia for over 20 years. He was caught, in part, by analyzing his finances after he made large, unexplained purchases.
+              </p>
+              <div className="flex items-center gap-2 text-accent hover:text-accent/80 transition-colors">
+                <ExternalLink className="w-5 h-5" />
+                <a 
+                  href="https://www.fbi.gov/history/famous-cases/robert-hanssen" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  You can read his full story here: FBI: Robert Hanssen
+                </a>
+              </div>
             </div>
           </div>
         </DialogContent>
