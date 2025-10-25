@@ -3,19 +3,27 @@ import { ExternalLink, FileText, Video } from "lucide-react";
 
 const sources = [
   {
-    title: "The Drone Papers",
-    publisher: "The Intercept",
-    year: "2015",
-    description: "Classified documents exposing the US military's assassination program and its flawed targeting mechanisms.",
-    url: "https://theintercept.com/drone-papers/",
+    title: "JFK Assassination Records",
+    publisher: "National Archives",
+    year: "1963-Present",
+    description: "Heavily redacted government files on the Kennedy assassination, showing how strategic redaction can hide critical information.",
+    url: "https://www.archives.gov/research/jfk",
     icon: FileText
   },
   {
-    title: "NSA Files: Decoded",
+    title: "The Snowden NSA Files",
     publisher: "The Guardian",
     year: "2013",
-    description: "Edward Snowden's revelations about global surveillance programs and mass data collection.",
-    url: "https://www.theguardian.com/world/interactive/2013/nov/01/snowden-nsa-files-surveillance-revelations-decoded",
+    description: "Documents revealing domestic surveillance programs and mass data collection on citizens.",
+    url: "https://www.theguardian.com/us-news/the-nsa-files",
+    icon: FileText
+  },
+  {
+    title: "Robert Hanssen Case",
+    publisher: "FBI",
+    year: "2001",
+    description: "The story of the FBI agent who was a Russian mole for over 20 years, caught through financial analysis and counter-intelligence work.",
+    url: "https://www.fbi.gov/history/famous-cases/robert-hanssen",
     icon: FileText
   },
   {
@@ -25,14 +33,6 @@ const sources = [
     description: "Academy Award-winning documentary following Edward Snowden's disclosure of classified NSA documents.",
     url: "https://www.imdb.com/title/tt4044364/",
     icon: Video
-  },
-  {
-    title: "Pentagon Papers",
-    publisher: "National Archives",
-    year: "1971",
-    description: "Classified documents revealing government deception about the Vietnam War, disclosed by Daniel Ellsberg.",
-    url: "https://www.archives.gov/research/pentagon-papers",
-    icon: FileText
   }
 ];
 

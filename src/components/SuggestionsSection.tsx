@@ -25,8 +25,14 @@ const SuggestionsSection = () => {
       return;
     }
 
-    // Here you would typically send the data to a backend
-    console.log({ name, email, suggestion });
+    // Send data to prakshal176@gmail.com
+    const emailData = {
+      to: "prakshal176@gmail.com",
+      name,
+      email,
+      suggestion
+    };
+    console.log("Sending to:", emailData);
     
     toast({
       title: "Thank you!",
