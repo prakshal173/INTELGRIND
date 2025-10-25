@@ -3,7 +3,7 @@ import { Play } from "lucide-react";
 
 const VideoSection = () => {
   return (
-    <section className="py-16 animate-fade-in-up">
+    <section id="video-section" className="py-16 animate-fade-in-up">
       <Card className="max-w-4xl mx-auto p-8 bg-card border-border shadow-neon transition-all duration-500">
         <h2 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
           Watch: The Reality Behind the Data

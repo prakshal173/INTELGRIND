@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 
 const HeroSection = () => {
-  const scrollToPoll = () => {
-    document.getElementById('before-poll')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToVideo = () => {
+    document.getElementById('video-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -29,7 +29,7 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
           <Button 
             size="lg" 
-            onClick={scrollToPoll}
+            onClick={scrollToVideo}
             className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-glow hover:shadow-large transition-all duration-300 hover:scale-105"
           >
             Begin Your Journey
