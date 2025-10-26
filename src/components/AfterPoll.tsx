@@ -9,11 +9,11 @@ interface AfterPollProps {
 }
 
 const questions = [
-  "Government surveillance programs are necessary for national security",
-  "The public should have access to classified information about military operations",
-  "Whistleblowers who expose government secrets should be protected",
   "People who have 'nothing to hide' should not be worried about government surveillance",
-  "A newspaper that publishes a leaked government secret is helping the public, not hurting the country"
+  "Government spying is mainly used to target specific, high-risk individuals (like known criminals or foreign agents)",
+  "If a government declassifies and releases an official report, we can trust that it gives an accurate picture of what happened",
+  "To prevent internal threats, government security agencies should focus their investigations on employees who show obvious warning signs (like being unhappy, in debt, or openly complaining)",
+  "We should generally trust our government's official statements, as they have more information than the public and are working to protect us"
 ];
 
 const AfterPoll = ({ onSubmit }: AfterPollProps) => {
