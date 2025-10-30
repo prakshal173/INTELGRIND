@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { MessageSquare } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const SuggestionsSection = () => {
   const [name, setName] = useState("");
@@ -13,7 +14,7 @@ const SuggestionsSection = () => {
   const [suggestion, setSuggestion] = useState("");
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!suggestion.trim()) {
@@ -25,14 +26,24 @@ const SuggestionsSection = () => {
       return;
     }
 
-    // Send data to prakshal176@gmail.com
-    const emailData = {
-      to: "prakshal176@gmail.com",
-      name,
-      email,
-      suggestion
-    };
-    console.log("Sending to:", emailData);
+    // Save to database
+    const { error } = await supabase
+      .from('suggestions')
+      .insert({
+        name: name.trim() || null,
+        email: email.trim() || null,
+        suggestion: suggestion.trim()
+      });
+
+    if (error) {
+      console.error("Error submitting suggestion:", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit your suggestion. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     toast({
       title: "Thank you!",
