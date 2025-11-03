@@ -9,11 +9,11 @@ interface AfterPollProps {
 }
 
 const questions = [
-  "People who have 'nothing to hide' should not be worried about government surveillance",
-  "Government spying is mainly used to target specific, high-risk individuals (like known criminals or foreign agents)",
-  "If a government declassifies and releases an official report, we can trust that it gives an accurate picture of what happened",
-  "To prevent internal threats, government security agencies should focus their investigations on employees who show obvious warning signs (like being unhappy, in debt, or openly complaining)",
-  "We should generally trust our government's official statements, as they have more information than the public and are working to protect us"
+  "A government's duty to protect its citizens from foreign threats is more important than an individual's absolute right to privacy.",
+  "In an investigation, a person's character and known motives (like anger, debt, or greed) are the most reliable guides to finding the truth.",
+  "The 'truth' of a historical event is best understood by reading the official government reports released after the fact.",
+  "To protect national security, it is necessary for intelligence agencies to operate with a level of suspicion and secrecy that would be considered 'unethical' in normal, everyday life.",
+  "It is an acceptable part of national security for a government to 'control the narrative' of a secret operation, as long as they don't tell a direct, provable lie."
 ];
 
 const AfterPoll = ({ onSubmit }: AfterPollProps) => {
