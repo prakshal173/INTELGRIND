@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { Clock, MapPin, Image as ImageIcon, MessageSquare } from "lucide-react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 import clue1 from "@/assets/osint-clue-1.jpg";
 import clue2 from "@/assets/osint-clue-2.jpg";
 import clue3 from "@/assets/osint-clue-3.jpg";
@@ -34,29 +36,29 @@ const visualClues: VisualClue[] = [
   {
     id: 1,
     title: "Image 1",
-    description: "Photo of a distinctive building with a clock tower",
-    tag: "European architecture",
+    description: "Gothic architecture with iconic clock tower and Glockenspiel",
+    tag: "Town Hall Square",
     image: clue1,
   },
   {
     id: 2,
     title: "Image 2",
-    description: "Screenshot of a social media check-in at a coffee shop",
-    tag: "Location tag visible",
+    description: "European cafe with outdoor seating, historic building facade",
+    tag: "Historic center cafe",
     image: clue2,
   },
   {
     id: 3,
     title: "Image 3",
-    description: "Landscape photo with mountain range in background",
-    tag: "Distinctive peak formation",
+    description: "Bavarian Alps mountain range visible from city",
+    tag: "Alpine backdrop",
     image: clue3,
   },
   {
     id: 4,
     title: "Image 4",
-    description: "Street sign showing intersection of two roads",
-    tag: "City name partially visible",
+    description: "Street intersection sign showing 'Karlsplatz'",
+    tag: "German street names",
     image: clue4,
   },
 ];
@@ -64,35 +66,40 @@ const visualClues: VisualClue[] = [
 const socialPosts: SocialPost[] = [
   {
     id: 1,
-    text: "Just arrived at the conference! Can't wait to see everyone tomorrow morning.",
+    text: "Just landed in Bavaria! 🥨 The Alps look amazing from here. Conference starts tomorrow at Marienplatz.",
     timestamp: "2024-03-15 18:30",
   },
   {
     id: 2,
-    text: "Best coffee in town at Main Street Cafe. If you know, you know! ☕",
-    timestamp: "2024-03-15 09:15",
+    text: "Morning coffee at this cute spot near Karlsplatz. Best Bavarian pretzels I've ever had! ☕🥨",
+    timestamp: "2024-03-16 09:15",
   },
   {
     id: 3,
-    text: "The view from my hotel room is incredible. You can see the whole downtown!",
-    timestamp: "2024-03-15 20:00",
+    text: "The Glockenspiel show at 11am was incredible! So many tourists here at the Rathaus.",
+    timestamp: "2024-03-16 11:05",
   },
   {
     id: 4,
-    text: "Meeting at the riverside convention center at 10 AM sharp.",
-    timestamp: "2024-03-16 07:30",
+    text: "Hotel room view is insane - can literally see the Alps from my window! This city is beautiful. 🏔️",
+    timestamp: "2024-03-15 20:00",
   },
   {
     id: 5,
-    text: "Heading home tomorrow. This city never disappoints!",
-    timestamp: "2024-03-16 19:00",
+    text: "Meeting at the convention center near the Isar river tomorrow morning. Time to prep my presentation!",
+    timestamp: "2024-03-16 19:30",
+  },
+  {
+    id: 6,
+    text: "Last day here. Grabbed a weisswurst breakfast before heading to the airport. Will miss this place! 🇩🇪",
+    timestamp: "2024-03-17 08:00",
   },
 ];
 
 const locations: Location[] = [
-  { id: 1, name: "New York City", isCorrect: false },
-  { id: 2, name: "Portland, Oregon", isCorrect: false },
-  { id: 3, name: "Denver, Colorado", isCorrect: false },
+  { id: 1, name: "Munich, Germany", isCorrect: true },
+  { id: 2, name: "Vienna, Austria", isCorrect: false },
+  { id: 3, name: "Prague, Czech Republic", isCorrect: false },
 ];
 
 const OSINTChallenge = () => {
@@ -104,6 +111,45 @@ const OSINTChallenge = () => {
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
   const [wrongGuesses, setWrongGuesses] = useState<number[]>([]);
   const { toast } = useToast();
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+
+  // Initialize map
+  useEffect(() => {
+    if (!mapContainer.current || map.current) return;
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoibG92YWJsZSIsImEiOiJjbTU4eHg5OXMwZjBvMmpzYjY4MnY5NnRiIn0.pxLFHCGq8zJvL0sSUwP0Ow';
+    
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [11.576, 48.137],
+      zoom: 10,
+    });
+
+    // Add markers for each location
+    const locationCoords = [
+      { lng: 11.576, lat: 48.137, name: "Munich, Germany" },
+      { lng: 16.3738, lat: 48.2082, name: "Vienna, Austria" },
+      { lng: 14.4378, lat: 50.0755, name: "Prague, Czech Republic" },
+    ];
+
+    locationCoords.forEach((coord) => {
+      const el = document.createElement('div');
+      el.className = 'w-3 h-3 bg-primary rounded-full border-2 border-background shadow-lg';
+      
+      new mapboxgl.Marker(el)
+        .setLngLat([coord.lng, coord.lat])
+        .setPopup(new mapboxgl.Popup({ offset: 25 }).setText(coord.name))
+        .addTo(map.current!);
+    });
+
+    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    return () => {
+      map.current?.remove();
+    };
+  }, []);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -234,16 +280,9 @@ const OSINTChallenge = () => {
                 <h3 className="text-xl font-bold">Select Target Location</h3>
               </div>
               
-              {/* Map Placeholder */}
-              <div className="relative aspect-video bg-gradient-to-br from-blue-950/50 to-purple-950/50 rounded-lg mb-6 flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <MapPin className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">Interactive Map Placeholder</p>
-                </div>
-                {/* Decorative pins */}
-                <div className="absolute top-1/4 left-1/3 w-3 h-3 bg-primary rounded-full animate-pulse" />
-                <div className="absolute top-1/2 right-1/4 w-3 h-3 bg-blue-500 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
-                <div className="absolute bottom-1/3 left-1/2 w-3 h-3 bg-purple-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+              {/* Interactive Map */}
+              <div className="relative aspect-video rounded-lg mb-6 overflow-hidden border border-border">
+                <div ref={mapContainer} className="absolute inset-0" />
               </div>
 
               {/* Location Buttons */}
@@ -275,7 +314,7 @@ const OSINTChallenge = () => {
               <div className="mt-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
                 <p className="text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">Strategy:</span> Cross-reference visual clues with social media posts. 
-                  Look for location tags, landmarks, and timeline consistency. Complete within 30 seconds for a bonus!
+                  Look for architectural landmarks, geographic features, street names, and cultural references. Complete within 60 seconds for a +20 bonus!
                 </p>
               </div>
             </Card>
