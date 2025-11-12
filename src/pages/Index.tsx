@@ -3,9 +3,8 @@ import { useToast } from "@/hooks/use-toast";
 import HeroSection from "@/components/HeroSection";
 import BeforePoll from "@/components/BeforePoll";
 import InteractiveTimeline from "@/components/InteractiveTimeline";
-import VideoSection from "@/components/VideoSection";
 import RedactionChallenge from "@/components/RedactionChallenge";
-import MoleHunt from "@/components/MoleHunt";
+import OSINTChallenge from "@/components/OSINTChallenge";
 import AfterPoll from "@/components/AfterPoll";
 import ResultsChart from "@/components/ResultsChart";
 import ArchiveSection from "@/components/ArchiveSection";
@@ -50,14 +49,12 @@ const Index = () => {
       <HeroSection />
       
       <div className="container mx-auto px-4 py-16 space-y-32">
-        <VideoSection />
-        
         <BeforePoll onSubmit={handleBeforePollSubmit} />
         
         <div id="content-modules" className="space-y-32">
           <InteractiveTimeline />
           <RedactionChallenge />
-          <MoleHunt />
+          <OSINTChallenge />
         </div>
 
         {beforeAnswers.length > 0 && (
