@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import HeroSection from "@/components/HeroSection";
 import BeforePoll from "@/components/BeforePoll";
-import InteractiveTimeline from "@/components/InteractiveTimeline";
-import RedactionChallenge from "@/components/RedactionChallenge";
+import SIGINTSoundLab from "@/components/SIGINTSoundLab";
+import CyberTrace from "@/components/CyberTrace";
 import OSINTChallenge from "@/components/OSINTChallenge";
 import AfterPoll from "@/components/AfterPoll";
 import ResultsChart from "@/components/ResultsChart";
@@ -52,8 +52,8 @@ const Index = () => {
         <BeforePoll onSubmit={handleBeforePollSubmit} />
         
         <div id="content-modules" className="space-y-32">
-          <InteractiveTimeline />
-          <RedactionChallenge />
+          <SIGINTSoundLab />
+          <CyberTrace />
           <OSINTChallenge />
         </div>
 
