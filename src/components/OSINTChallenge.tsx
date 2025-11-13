@@ -102,7 +102,11 @@ const locations: Location[] = [
   { id: 3, name: "Prague, Czech Republic", isCorrect: false },
 ];
 
-const OSINTChallenge = () => {
+interface OSINTChallengeProps {
+  onComplete?: () => void;
+}
+
+const OSINTChallenge = ({ onComplete }: OSINTChallengeProps = {}) => {
   const [score, setScore] = useState(100);
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(true);
