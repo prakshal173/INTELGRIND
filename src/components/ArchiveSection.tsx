@@ -99,7 +99,7 @@ const ArchiveSection = () => {
       <footer className="mt-24 pt-12 border-t border-border">
         <div className="max-w-4xl mx-auto text-center space-y-4">
           <p className="text-sm text-muted-foreground">
-            © 2025 The Gray Zone. An educational project exploring government secrecy.
+            © 2025 INTELGRID. An educational cyber intelligence training platform.
           </p>
           <p className="text-xs text-muted-foreground">
             This website is for educational purposes only. All information is sourced from publicly available documents and journalism.
