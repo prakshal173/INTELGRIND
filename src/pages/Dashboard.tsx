@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ResultsChart from "@/components/ResultsChart";
+import { supabase } from "@/integrations/supabase/client";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -10,15 +11,22 @@ const Dashboard = () => {
   const [hasCompletedJourney, setHasCompletedJourney] = useState(false);
 
   useEffect(() => {
-    // Load poll data from localStorage
-    const storedData = localStorage.getItem('pollData');
-    if (storedData) {
-      try {
-        setPollData(JSON.parse(storedData));
-      } catch (e) {
-        console.error('Failed to parse poll data', e);
+    // Fetch aggregated poll data from Supabase
+    const fetchPollData = async () => {
+      const { data, error } = await supabase
+        .from('poll_results')
+        .select('perspective_changed');
+      
+      if (error) {
+        console.error('Error fetching poll data:', error);
+      } else if (data) {
+        const changedCount = data.filter(r => r.perspective_changed).length;
+        const sameCount = data.filter(r => !r.perspective_changed).length;
+        setPollData({ changedCount, sameCount });
       }
-    }
+    };
+
+    fetchPollData();
     
     // Check if user has completed the journey
     const beforeAnswers = localStorage.getItem('beforeAnswers');
@@ -150,7 +158,7 @@ const Dashboard = () => {
                 <span className="text-muted-foreground font-mono">SYSTEM ONLINE</span>
               </div>
               <div className="text-muted-foreground font-mono">
-                CLEARANCE: TOP SECRET // SCI
+                CLEARANCE: TOP SECRET
               </div>
             </div>
           </div>
