@@ -10,20 +10,20 @@ All colors MUST be HSL.
 :root {
     /* Deep dark teal/cyan theme backgrounds */
     --background: 214 28% 5%;
-    --foreground: 192 20% 95%;
+    --foreground: 180 100% 90%;
 
     --card: 216 22% 8%;
-    --card-foreground: 192 20% 95%;
+    --card-foreground: 180 100% 90%;
 
     --popover: 216 22% 8%;
-    --popover-foreground: 192 20% 95%;
+    --popover-foreground: 180 100% 90%;
 
     /* Bright cyan primary accent */
-    --primary: 188 100% 62%;
+    --primary: 180 100% 50%;
     --primary-foreground: 216 22% 8%;
 
     /* Soft teal-green secondary */
-    --secondary: 168 78% 55%;
+    --secondary: 180 100% 40%;
     --secondary-foreground: 216 22% 8%;
 
     --muted: 214 20% 15%;
