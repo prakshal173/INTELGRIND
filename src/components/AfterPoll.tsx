@@ -43,20 +43,38 @@ const AfterPoll = ({ onSubmit }: AfterPollProps) => {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {questions.map((question, index) => (
-            <div key={index} className="space-y-4 p-4 rounded-lg bg-muted/20 border border-muted hover:border-secondary/50 transition-all duration-300">
-              <p className="text-lg font-medium">{index + 1}. {question}</p>
+            <div key={index} className="space-y-4 p-5 rounded-lg bg-muted/20 border border-muted hover:border-secondary/50 transition-all duration-300">
+              <p className="text-lg font-medium mb-3">{index + 1}. {question}</p>
+              <p className="text-sm text-muted-foreground mb-4">
+                After experiencing the training modules, please select your updated response.
+              </p>
               <RadioGroup 
                 onValueChange={(value) => handleAnswer(index, value)}
-                className="flex gap-4"
+                value={answers[index] !== undefined ? (answers[index] ? 'agree' : 'disagree') : undefined}
+                className="flex flex-col gap-3"
               >
-                <div className="flex items-center space-x-2">
+                <Label 
+                  htmlFor={`after-q${index}-agree`} 
+                  className={`flex items-center space-x-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                    answers[index] === true 
+                      ? 'border-secondary bg-secondary/10 text-secondary' 
+                      : 'border-border hover:border-secondary/50 hover:bg-secondary/5'
+                  }`}
+                >
                   <RadioGroupItem value="agree" id={`after-q${index}-agree`} className="border-secondary" />
-                  <Label htmlFor={`after-q${index}-agree`} className="cursor-pointer hover:text-secondary transition-colors">Agree</Label>
-                </div>
-                <div className="flex items-center space-x-2">
+                  <span className="font-medium">Agree</span>
+                </Label>
+                <Label 
+                  htmlFor={`after-q${index}-disagree`} 
+                  className={`flex items-center space-x-3 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
+                    answers[index] === false 
+                      ? 'border-secondary bg-secondary/10 text-secondary' 
+                      : 'border-border hover:border-secondary/50 hover:bg-secondary/5'
+                  }`}
+                >
                   <RadioGroupItem value="disagree" id={`after-q${index}-disagree`} className="border-secondary" />
-                  <Label htmlFor={`after-q${index}-disagree`} className="cursor-pointer hover:text-secondary transition-colors">Disagree</Label>
-                </div>
+                  <span className="font-medium">Disagree</span>
+                </Label>
               </RadioGroup>
             </div>
           ))}

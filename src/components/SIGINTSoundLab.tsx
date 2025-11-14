@@ -47,9 +47,9 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
     setCurrentMorseDisplay("");
     
     const speedMultipliers = {
-      slow: 0.5,
-      medium: 1.0,
-      fast: 1.5
+      slow: 0.3,
+      medium: 0.6,
+      fast: 1.0
     };
 
     try {
@@ -86,21 +86,44 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
 
   return (
     <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Volume2 className="h-8 w-8 text-primary" />
-          <h2 className="text-4xl font-bold">SIGINT Sound Lab</h2>
-        </div>
-        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Intercept and decode Morse code transmissions to extract classified intelligence
-        </p>
-      </div>
+      {/* Mission Brief Section */}
+      <Card className="bg-card/80 backdrop-blur-sm border-primary/20">
+        <CardHeader>
+          <CardTitle className="text-3xl flex items-center gap-3">
+            <Volume2 className="h-8 w-8 text-primary" />
+            Mission Brief
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-muted-foreground text-lg">
+            Signals intelligence has intercepted an encrypted audio transmission. Our analysis indicates the message uses 
+            Morse code - a classic covert communication method.
+          </p>
+          <p className="text-foreground font-semibold text-lg">
+            Your mission: Decode the intercepted Morse transmission and identify the message.
+          </p>
+          
+          {/* Understanding Morse Code Audio */}
+          <div className="mt-6 space-y-3 p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <h3 className="text-primary font-semibold flex items-center gap-2">
+              <span className="text-lg">🔊</span> Understanding Morse Code Audio
+            </h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><span className="text-primary font-mono">• Short beep (dot ".")</span>: Quick, brief tone</li>
+              <li><span className="text-primary font-mono">• Long beep (dash "—")</span>: Extended tone (3x longer than dot)</li>
+              <li><span className="text-primary font-mono">• Short pause</span>: Gap between dots/dashes in same letter</li>
+              <li><span className="text-primary font-mono">• Medium pause</span>: Gap between different letters</li>
+              <li><span className="text-primary font-mono">• Long pause</span>: Gap between words</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
 
-      <div className="grid lg:grid-cols-[1.2fr,1fr] gap-6">
+      <div className="grid lg:grid-cols-[1fr,400px] gap-6">
         {/* Left Panel - Audio Player & Input */}
         <div className="space-y-6">
           {/* Audio Player Card */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large">
+          <Card className="bg-card/80 backdrop-blur-sm border-border">
             <CardHeader>
               <CardTitle>Intercepted Transmission</CardTitle>
               <CardDescription>Play the audio signal to decode the message</CardDescription>
@@ -112,7 +135,7 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
                   onClick={playMorseCode}
                   disabled={isPlaying}
                   size="lg"
-                  className="w-full max-w-sm h-16 text-lg gap-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow"
+                  className="w-full max-w-sm h-16 text-lg gap-3 bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   <Play className="h-6 w-6" />
                   {isPlaying ? "Transmitting..." : "Play Transmission"}
@@ -141,7 +164,7 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
                 <div className="text-center space-y-3">
                   <p className="text-sm text-muted-foreground font-medium">Real-time Morse Visual</p>
                   {currentMorseDisplay ? (
-                    <div className="font-mono text-2xl text-primary tracking-wider animate-pulse-glow">
+                    <div className="font-mono text-2xl text-primary tracking-wider">
                       {currentMorseDisplay}
                     </div>
                   ) : (
@@ -154,7 +177,7 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
               <div className="space-y-2 text-sm text-muted-foreground font-mono">
                 <div className="flex justify-between">
                   <span>Duration:</span>
-                  <span>~{playbackSpeed === 'slow' ? '15' : playbackSpeed === 'medium' ? '10' : '7'}s</span>
+                  <span>~{playbackSpeed === 'slow' ? '20' : playbackSpeed === 'medium' ? '12' : '8'}s</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Frequency:</span>
@@ -177,7 +200,7 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
           </Card>
 
           {/* Decoder Input Card */}
-          <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large">
+          <Card className="bg-card/80 backdrop-blur-sm border-border">
             <CardHeader>
               <CardTitle>Decode Message</CardTitle>
               <CardDescription>Enter the decoded text from the Morse transmission</CardDescription>
@@ -192,7 +215,7 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
               />
               <Button 
                 onClick={handleSubmit} 
-                className="w-full h-12 text-lg bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow"
+                className="w-full h-12 text-lg bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 Submit Decoding
               </Button>
@@ -200,14 +223,14 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
           </Card>
         </div>
 
-        {/* Right Panel - Morse Code Reference (Always Visible) */}
-        <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large h-fit sticky top-6">
+        {/* Right Panel - Morse Code Reference (Always Visible & Sticky) */}
+        <Card className="bg-card/80 backdrop-blur-sm border-border h-fit sticky top-6">
           <CardHeader>
             <CardTitle>Morse Code Reference</CardTitle>
             <CardDescription>International Morse Code alphabet</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-3 font-mono text-sm">
+            <div className="grid grid-cols-2 gap-2 font-mono text-sm">
               {Object.entries(morseCodeMap).filter(([key]) => key !== ' ').map(([letter, code]) => (
                 <div key={letter} className="flex items-center justify-between p-2 rounded bg-muted/30 hover:bg-muted/50 transition-colors">
                   <span className="font-bold text-foreground">{letter}:</span>
