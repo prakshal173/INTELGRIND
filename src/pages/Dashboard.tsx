@@ -12,6 +12,14 @@ const Dashboard = () => {
   const [hasCompletedJourney, setHasCompletedJourney] = useState(false);
 
   useEffect(() => {
+    // Initialize a fresh session on first open of the site root
+    if (window.location.pathname === '/' && !sessionStorage.getItem('journeySessionInitialized')) {
+      localStorage.removeItem('beforeAnswers');
+      localStorage.removeItem('afterAnswers');
+      localStorage.removeItem('completedModules');
+      sessionStorage.setItem('journeySessionInitialized', 'true');
+    }
+
     // Fetch aggregated poll data from Supabase
     const fetchPollData = async () => {
       const { data, error } = await supabase
