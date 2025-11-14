@@ -51,7 +51,7 @@ const AfterQuestions = () => {
         
         // Store result in Supabase for aggregated tracking
         const { error } = await supabase
-          .from('poll_results')
+          .from('poll_results' as any)
           .insert([{ perspective_changed: userChanged }]);
 
         if (error) {
