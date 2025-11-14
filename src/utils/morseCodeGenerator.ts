@@ -121,3 +121,91 @@ export class MorseCodeGenerator {
     return totalDuration / 1000; // Convert to seconds
   }
 }
+
+// Export function for easier use with visual callback
+export async function generateMorseAudio(
+  audioContext: AudioContext,
+  text: string,
+  speedMultiplier: number = 1,
+  onCharacterPlay?: (morseChar: string) => void
+): Promise<void> {
+  const dotDuration = 150 / speedMultiplier; // Base duration in ms
+  const dashDuration = dotDuration * 3;
+  const symbolGap = dotDuration;
+  const letterGap = dotDuration * 3;
+  const frequency = 800; // Hz
+
+  const morseMap: { [key: string]: string } = {
+    'A': '.-',    'B': '-...',  'C': '-.-.',  'D': '-..',
+    'E': '.',     'F': '..-.',  'G': '--.',   'H': '....',
+    'I': '..',    'J': '.---',  'K': '-.-',   'L': '.-..',
+    'M': '--',    'N': '-.',    'O': '---',   'P': '.--.',
+    'Q': '--.-',  'R': '.-.',   'S': '...',   'T': '-',
+    'U': '..-',   'V': '...-',  'W': '.--',   'X': '-..-',
+    'Y': '-.--',  'Z': '--..',
+    '0': '-----', '1': '.----', '2': '..---', '3': '...--',
+    '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+    '8': '---..', '9': '----.',
+  };
+
+  const playTone = (duration: number): Promise<void> => {
+    return new Promise((resolve) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = frequency;
+      oscillator.type = 'sine';
+      
+      const now = audioContext.currentTime;
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(0.3, now + 0.005);
+      gainNode.gain.setValueAtTime(0.3, now + duration / 1000 - 0.005);
+      gainNode.gain.linearRampToValueAtTime(0, now + duration / 1000);
+      
+      oscillator.start(now);
+      oscillator.stop(now + duration / 1000);
+      
+      setTimeout(resolve, duration);
+    });
+  };
+
+  const delay = (ms: number): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i].toUpperCase();
+    
+    if (char === ' ') {
+      await delay(letterGap * 2);
+      continue;
+    }
+
+    const morseCode = morseMap[char];
+    if (!morseCode) continue;
+
+    // Display the full morse code for the letter
+    if (onCharacterPlay) {
+      onCharacterPlay(morseCode);
+    }
+
+    // Play each symbol in the morse code
+    for (let j = 0; j < morseCode.length; j++) {
+      const symbol = morseCode[j];
+      
+      if (symbol === '.') {
+        await playTone(dotDuration);
+        await delay(symbolGap);
+      } else if (symbol === '-') {
+        await playTone(dashDuration);
+        await delay(symbolGap);
+      }
+    }
+    
+    // Gap between letters
+    await delay(letterGap);
+  }
+}

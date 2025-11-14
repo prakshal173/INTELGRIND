@@ -8,58 +8,62 @@ All colors MUST be HSL.
 
 @layer base {
 :root {
-    --background: 220 25% 6%;
+    /* Deep charcoal backgrounds */
+    --background: 216 19% 6%;
     --foreground: 210 20% 98%;
 
-    --card: 220 23% 9%;
+    --card: 217 19% 9%;
     --card-foreground: 210 20% 98%;
 
-    --popover: 220 23% 9%;
+    --popover: 217 19% 9%;
     --popover-foreground: 210 20% 98%;
 
-    --primary: 280 80% 55%;
-    --primary-foreground: 210 20% 98%;
+    /* Teal primary accent */
+    --primary: 174 100% 39%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 340 75% 50%;
-    --secondary-foreground: 210 20% 98%;
+    /* Soft cyan secondary */
+    --secondary: 193 100% 69%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 220 15% 20%;
-    --muted-foreground: 220 10% 65%;
+    --muted: 217 15% 18%;
+    --muted-foreground: 217 10% 60%;
 
-    --accent: 190 85% 45%;
-    --accent-foreground: 210 20% 98%;
+    /* Mint/green accent */
+    --accent: 149 100% 76%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 15%;
-    --ring: 280 80% 55%;
+    --border: 217 20% 15%;
+    --input: 217 20% 12%;
+    --ring: 174 100% 39%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --gradient-subtle: linear-gradient(135deg, hsl(220 25% 6%), hsl(220 23% 11%));
-    --gradient-depth: radial-gradient(circle at 50% 0%, hsl(220 25% 15%), hsl(220 25% 6%));
-    --gradient-accent: linear-gradient(135deg, hsl(280 80% 55%), hsl(340 75% 50%));
-    --gradient-cyber: linear-gradient(135deg, hsl(280 80% 55% / 0.15), hsl(340 75% 50% / 0.15));
-    --gradient-neon: linear-gradient(90deg, hsl(280 80% 55%), hsl(190 85% 45%), hsl(340 75% 50%));
+    /* Modern subtle gradients */
+    --gradient-subtle: linear-gradient(135deg, hsl(216 19% 6%), hsl(217 19% 11%));
+    --gradient-depth: radial-gradient(circle at 50% 0%, hsl(217 19% 13%), hsl(216 19% 6%));
+    --gradient-teal: linear-gradient(135deg, hsl(174 100% 39%), hsl(193 100% 69%));
+    --gradient-cyber: linear-gradient(135deg, hsl(174 100% 39% / 0.12), hsl(193 100% 69% / 0.08));
     
     --shadow-soft: 0 2px 20px -5px hsl(0 0% 0% / 0.6);
-    --shadow-medium: 0 8px 30px -8px hsl(280 80% 55% / 0.25);
-    --shadow-large: 0 20px 50px -12px hsl(280 80% 55% / 0.35);
-    --shadow-glow: 0 0 30px hsl(280 80% 55% / 0.4), 0 0 60px hsl(340 75% 50% / 0.2);
-    --shadow-neon: 0 0 10px hsl(280 80% 55% / 0.5), 0 0 20px hsl(340 75% 50% / 0.3), 0 0 40px hsl(190 85% 45% / 0.2);
+    --shadow-medium: 0 8px 30px -8px hsl(174 100% 39% / 0.20);
+    --shadow-large: 0 20px 50px -12px hsl(0 0% 0% / 0.55);
+    --shadow-glow: 0 0 30px hsl(174 100% 39% / 0.3), 0 0 60px hsl(193 100% 69% / 0.15);
+    --shadow-teal-glow: 0 0 18px hsl(174 100% 39% / 0.35);
 
-    --transition-smooth: all 0.3s ease-in-out;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 220 25% 6%;
+    --sidebar-background: 216 19% 6%;
     --sidebar-foreground: 210 20% 98%;
-    --sidebar-primary: 280 80% 55%;
-    --sidebar-primary-foreground: 210 20% 98%;
-    --sidebar-accent: 220 20% 15%;
+    --sidebar-primary: 174 100% 39%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 217 20% 12%;
     --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 280 80% 55%;
+    --sidebar-border: 217 20% 15%;
+    --sidebar-ring: 174 100% 39%;
   }
 
 }
