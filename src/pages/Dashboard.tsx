@@ -90,7 +90,7 @@ const Dashboard = () => {
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-widest font-mono">
             <span className="text-primary">
-              INTELGRID_EXT
+              INTELGRID
             </span>
           </h1>
           
@@ -99,7 +99,7 @@ const Dashboard = () => {
           </p>
 
           <p className="text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto">
-            Master digital forensics, signal intelligence, and cyber investigation techniques through interactive missions
+            Welcome to INTELGRID. The following modules are live simulations designed to test your skills and challenge your current analytical judgment.
           </p>
 
           <div className="inline-block px-6 py-3 border-2 border-primary/50 rounded-lg">
@@ -113,18 +113,24 @@ const Dashboard = () => {
         <div className="max-w-3xl mx-auto space-y-8">
           {!hasCompletedJourney ? (
             // First time view - Welcome interface
-            <Card className="p-12 bg-card/50 backdrop-blur-sm border-primary/30 shadow-large transition-all duration-500">
-              <div className="text-center space-y-6">
-                <Button 
-                  onClick={handleBeginAssessment}
-                  size="lg"
-                  className="bg-transparent border-2 border-primary/50 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300 text-base px-8 py-6 font-mono"
-                >
-                  <span className="mr-2">📊</span>
-                  View Training Analytics
-                </Button>
+            <>
+              <Card className="p-12 bg-card/50 backdrop-blur-sm border-primary/30 shadow-large transition-all duration-500">
+                <div className="text-center space-y-6">
+                  <Button 
+                    onClick={handleBeginAssessment}
+                    size="lg"
+                    className="bg-transparent border-2 border-primary/50 text-foreground hover:bg-primary/10 hover:border-primary transition-all duration-300 text-base px-8 py-6 font-mono"
+                  >
+                    Start
+                  </Button>
+                </div>
+              </Card>
+              
+              {/* Training Analytics Graph */}
+              <div className="animate-fade-in mt-8">
+                <ResultsChart data={pollData} />
               </div>
-            </Card>
+            </>
           ) : (
             <>
               {/* Completed journey view */}
