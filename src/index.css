@@ -8,62 +8,62 @@ All colors MUST be HSL.
 
 @layer base {
 :root {
-    /* Deep charcoal backgrounds */
-    --background: 216 19% 6%;
-    --foreground: 210 20% 98%;
+    /* Deep dark teal/cyan theme backgrounds */
+    --background: 214 28% 5%;
+    --foreground: 192 20% 95%;
 
-    --card: 217 19% 9%;
-    --card-foreground: 210 20% 98%;
+    --card: 216 22% 8%;
+    --card-foreground: 192 20% 95%;
 
-    --popover: 217 19% 9%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 216 22% 8%;
+    --popover-foreground: 192 20% 95%;
 
-    /* Teal primary accent */
-    --primary: 174 100% 39%;
-    --primary-foreground: 0 0% 0%;
+    /* Bright cyan primary accent */
+    --primary: 188 100% 62%;
+    --primary-foreground: 216 22% 8%;
 
-    /* Soft cyan secondary */
-    --secondary: 193 100% 69%;
-    --secondary-foreground: 0 0% 0%;
+    /* Soft teal-green secondary */
+    --secondary: 168 78% 55%;
+    --secondary-foreground: 216 22% 8%;
 
-    --muted: 217 15% 18%;
-    --muted-foreground: 217 10% 60%;
+    --muted: 214 20% 15%;
+    --muted-foreground: 192 15% 55%;
 
-    /* Mint/green accent */
-    --accent: 149 100% 76%;
-    --accent-foreground: 0 0% 0%;
+    /* Mint accent */
+    --accent: 158 100% 70%;
+    --accent-foreground: 216 22% 8%;
 
     --destructive: 0 85% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 217 20% 15%;
-    --input: 217 20% 12%;
-    --ring: 174 100% 39%;
+    --border: 214 25% 12%;
+    --input: 214 25% 10%;
+    --ring: 188 100% 62%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    /* Modern subtle gradients */
-    --gradient-subtle: linear-gradient(135deg, hsl(216 19% 6%), hsl(217 19% 11%));
-    --gradient-depth: radial-gradient(circle at 50% 0%, hsl(217 19% 13%), hsl(216 19% 6%));
-    --gradient-teal: linear-gradient(135deg, hsl(174 100% 39%), hsl(193 100% 69%));
-    --gradient-cyber: linear-gradient(135deg, hsl(174 100% 39% / 0.12), hsl(193 100% 69% / 0.08));
+    /* Premium teal/cyan gradients */
+    --gradient-subtle: linear-gradient(135deg, hsl(214 28% 5%), hsl(216 22% 10%));
+    --gradient-depth: radial-gradient(circle at 50% 0%, hsl(216 22% 12%), hsl(214 28% 5%));
+    --gradient-teal: linear-gradient(135deg, hsl(188 100% 62%), hsl(168 78% 55%));
+    --gradient-cyber: linear-gradient(135deg, hsl(188 100% 62% / 0.08), hsl(168 78% 55% / 0.05));
     
-    --shadow-soft: 0 2px 20px -5px hsl(0 0% 0% / 0.6);
-    --shadow-medium: 0 8px 30px -8px hsl(174 100% 39% / 0.20);
-    --shadow-large: 0 20px 50px -12px hsl(0 0% 0% / 0.55);
-    --shadow-glow: 0 0 30px hsl(174 100% 39% / 0.3), 0 0 60px hsl(193 100% 69% / 0.15);
-    --shadow-teal-glow: 0 0 18px hsl(174 100% 39% / 0.35);
+    --shadow-soft: 0 2px 20px -5px hsl(0 0% 0% / 0.7);
+    --shadow-medium: 0 8px 30px -8px hsl(188 100% 62% / 0.15);
+    --shadow-large: 0 20px 50px -12px hsl(0 0% 0% / 0.65);
+    --shadow-glow: 0 0 24px hsl(188 100% 62% / 0.2), 0 0 48px hsl(168 78% 55% / 0.1);
+    --shadow-teal-glow: 0 0 20px hsl(188 100% 62% / 0.3);
 
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.24s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 216 19% 6%;
-    --sidebar-foreground: 210 20% 98%;
-    --sidebar-primary: 174 100% 39%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 217 20% 12%;
-    --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 217 20% 15%;
-    --sidebar-ring: 174 100% 39%;
+    --sidebar-background: 214 28% 5%;
+    --sidebar-foreground: 192 20% 95%;
+    --sidebar-primary: 188 100% 62%;
+    --sidebar-primary-foreground: 216 22% 8%;
+    --sidebar-accent: 214 25% 12%;
+    --sidebar-accent-foreground: 192 20% 95%;
+    --sidebar-border: 214 25% 12%;
+    --sidebar-ring: 188 100% 62%;
   }
 
 }
@@ -75,16 +75,34 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-weight: 400;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', monospace;
   }
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Mapbox popup styling fix */
+  .mapboxgl-popup-content {
+    background-color: hsl(var(--card)) !important;
+    color: hsl(var(--foreground)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+  }
+
+  .mapboxgl-popup-tip {
+    border-top-color: hsl(var(--card)) !important;
   }
 }

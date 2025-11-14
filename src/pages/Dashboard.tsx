@@ -10,6 +10,16 @@ const Dashboard = () => {
   const [hasCompletedJourney, setHasCompletedJourney] = useState(false);
 
   useEffect(() => {
+    // Load poll data from localStorage
+    const storedData = localStorage.getItem('pollData');
+    if (storedData) {
+      try {
+        setPollData(JSON.parse(storedData));
+      } catch (e) {
+        console.error('Failed to parse poll data', e);
+      }
+    }
+    
     // Check if user has completed the journey
     const beforeAnswers = localStorage.getItem('beforeAnswers');
     const afterAnswers = localStorage.getItem('afterAnswers');
@@ -17,12 +27,6 @@ const Dashboard = () => {
     
     if (beforeAnswers && afterAnswers && completedModules === 'all') {
       setHasCompletedJourney(true);
-      
-      // Load poll data
-      const storedData = localStorage.getItem('pollData');
-      if (storedData) {
-        setPollData(JSON.parse(storedData));
-      }
     }
   }, []);
 
@@ -49,11 +53,6 @@ const Dashboard = () => {
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12 space-y-4 animate-fade-in">
-          <div className="inline-block mb-4">
-            <div className="px-6 py-2 bg-primary/20 border border-primary/30 rounded-full">
-              <span className="text-sm font-mono tracking-wider text-primary">CLASSIFIED // SPS 261</span>
-            </div>
-          </div>
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-wider">
             <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
@@ -67,11 +66,9 @@ const Dashboard = () => {
         </div>
 
         {/* Results Chart - Always visible at top */}
-        {hasCompletedJourney && (
-          <div className="mb-12 animate-fade-in">
-            <ResultsChart data={pollData} />
-          </div>
-        )}
+        <div className="mb-12 animate-fade-in">
+          <ResultsChart data={pollData} />
+        </div>
 
         {/* Main Dashboard Content */}
         <div className="max-w-4xl mx-auto space-y-8">

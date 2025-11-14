@@ -160,8 +160,8 @@ const OSINTChallenge = ({ onComplete }: OSINTChallengeProps = {}) => {
       const marker = new mapboxgl.Marker(el)
         .setLngLat([coord.lng, coord.lat])
         .setPopup(
-          new mapboxgl.Popup({ offset: 25, closeButton: false })
-            .setHTML(`<div class="text-center p-2"><strong>${coord.name}</strong><br/><span class="text-xs">Click marker to select</span></div>`)
+          new mapboxgl.Popup({ offset: 25, closeButton: false, className: 'map-popup' })
+            .setHTML(`<div class="text-center p-2 bg-card text-foreground rounded"><strong class="text-primary">${coord.name}</strong><br/><span class="text-xs text-muted-foreground">Click marker to select</span></div>`)
         )
         .addTo(map.current!);
 
@@ -202,6 +202,12 @@ const OSINTChallenge = ({ onComplete }: OSINTChallengeProps = {}) => {
         title: "Mission Successful! 🎯",
         description: `You identified the location correctly! Final score: ${finalScore}${timeBonus > 0 ? ` (+${timeBonus} time bonus)` : ""}`,
       });
+      
+      // Mark OSINT as complete
+      const stored = localStorage.getItem('completedModules');
+      const completedModules = stored ? JSON.parse(stored) : { osint: false, sigint: false, cybint: false };
+      completedModules.osint = true;
+      localStorage.setItem('completedModules', JSON.stringify(completedModules));
     } else {
       setWrongGuesses([...wrongGuesses, locationId]);
       setScore(Math.max(0, score - 10));
