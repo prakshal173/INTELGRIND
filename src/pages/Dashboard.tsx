@@ -14,14 +14,14 @@ const Dashboard = () => {
     // Fetch aggregated poll data from Supabase
     const fetchPollData = async () => {
       const { data, error } = await supabase
-        .from('poll_results')
+        .from('poll_results' as any)
         .select('perspective_changed');
       
       if (error) {
         console.error('Error fetching poll data:', error);
       } else if (data) {
-        const changedCount = data.filter(r => r.perspective_changed).length;
-        const sameCount = data.filter(r => !r.perspective_changed).length;
+        const changedCount = data.filter((r: any) => r.perspective_changed).length;
+        const sameCount = data.filter((r: any) => !r.perspective_changed).length;
         setPollData({ changedCount, sameCount });
       }
     };
@@ -73,15 +73,10 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {/* Results Chart - Always visible at top */}
-        <div className="mb-12 animate-fade-in">
-          <ResultsChart data={pollData} />
-        </div>
-
         {/* Main Dashboard Content */}
         <div className="max-w-4xl mx-auto space-y-8">
           {!hasCompletedJourney ? (
-            // First time view
+            // First time view - Welcome interface
             <Card className="p-12 bg-card/50 backdrop-blur-sm border-border shadow-large hover:shadow-neon transition-all duration-500">
               <div className="text-center space-y-6">
                 <div className="w-20 h-20 mx-auto rounded-full bg-primary/20 flex items-center justify-center mb-6">
@@ -109,8 +104,8 @@ const Dashboard = () => {
               </div>
             </Card>
           ) : (
-            // Completed journey view
-            <div className="space-y-6 animate-fade-in">
+            <>
+              {/* Completed journey view */}
               <Card className="p-8 bg-card/50 backdrop-blur-sm border-primary/30 shadow-large">
                 <div className="text-center space-y-4">
                   <div className="w-16 h-16 mx-auto rounded-full bg-primary/20 flex items-center justify-center mb-4">
@@ -121,31 +116,36 @@ const Dashboard = () => {
                   
                   <h2 className="text-3xl font-bold text-primary">Assessment Complete</h2>
                   <p className="text-muted-foreground text-lg">
-                    Your analytical performance has been recorded. Review your results above.
+                    Your analytical performance has been recorded. Review your results below.
                   </p>
+
+                  <div className="grid md:grid-cols-2 gap-4 pt-6">
+                    <Button 
+                      onClick={handleBeginAssessment}
+                      variant="outline"
+                      size="lg"
+                      className="w-full py-6 text-lg border-primary/30 hover:bg-primary/10 hover:border-primary transition-all duration-300"
+                    >
+                      Start New Assessment
+                    </Button>
+                    
+                    <Button 
+                      onClick={handleReviewModules}
+                      variant="outline"
+                      size="lg"
+                      className="w-full py-6 text-lg border-accent/30 hover:bg-accent/10 hover:border-accent transition-all duration-300"
+                    >
+                      Review Training Modules
+                    </Button>
+                  </div>
                 </div>
               </Card>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <Button 
-                  onClick={handleBeginAssessment}
-                  variant="outline"
-                  size="lg"
-                  className="w-full py-6 text-lg border-primary/30 hover:bg-primary/10 hover:border-primary transition-all duration-300"
-                >
-                  Start New Assessment
-                </Button>
-                
-                <Button 
-                  onClick={handleReviewModules}
-                  variant="outline"
-                  size="lg"
-                  className="w-full py-6 text-lg border-accent/30 hover:bg-accent/10 hover:border-accent transition-all duration-300"
-                >
-                  Review Training Modules
-                </Button>
+              {/* Results Chart - Shows after completion */}
+              <div className="animate-fade-in">
+                <ResultsChart data={pollData} />
               </div>
-            </div>
+            </>
           )}
         </div>
 
