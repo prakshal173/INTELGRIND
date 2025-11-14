@@ -36,6 +36,7 @@ const CyberTrace = ({ onComplete }: CyberTraceProps = {}) => {
     { time: "14:20", user: "admin_team", message: "Everyone remember we have the security audit today" },
     { time: "14:21", user: "redfox", message: "Got it, working on the quarterly reports" },
     { time: "14:23", user: "blue_whale", message: "I'll be in the meeting room if anyone needs me" },
+    { time: "14:25", user: "redfox", message: "Just finished updating gateway 27 configuration" },
     { time: "14:26", user: "redfox", message: "Hey, anyone know why the network is so slow?" },
     { time: "14:27", user: "admin_team", message: "No issues reported. Running fine on my end." },
     { time: "14:29", user: "redfox", message: "Hmm, must be my workstation then. Gonna restart it" },
