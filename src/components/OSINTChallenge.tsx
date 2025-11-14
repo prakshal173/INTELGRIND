@@ -127,28 +127,48 @@ const OSINTChallenge = ({ onComplete }: OSINTChallengeProps = {}) => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [11.576, 48.137],
-      zoom: 10,
+      center: [13.4, 49.5], // Center between all three cities
+      zoom: 5, // Wider view to show all locations
+      pitch: 0,
     });
 
-    // Add markers for each location
+    // Add navigation controls
+    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    // Define locations with coordinates
     const locationCoords = [
-      { lng: 11.576, lat: 48.137, name: "Munich, Germany" },
-      { lng: 16.3738, lat: 48.2082, name: "Vienna, Austria" },
-      { lng: 14.4378, lat: 50.0755, name: "Prague, Czech Republic" },
+      { lng: 11.576, lat: 48.137, name: "Munich, Germany", id: 1 },
+      { lng: 16.3738, lat: 48.2082, name: "Vienna, Austria", id: 2 },
+      { lng: 14.4378, lat: 50.0755, name: "Prague, Czech Republic", id: 3 },
     ];
 
+    // Add interactive markers
     locationCoords.forEach((coord) => {
+      // Create marker element
       const el = document.createElement('div');
-      el.className = 'w-3 h-3 bg-primary rounded-full border-2 border-background shadow-lg';
-      
-      new mapboxgl.Marker(el)
-        .setLngLat([coord.lng, coord.lat])
-        .setPopup(new mapboxgl.Popup({ offset: 25 }).setText(coord.name))
-        .addTo(map.current!);
-    });
+      el.className = 'w-8 h-8 cursor-pointer transition-transform hover:scale-125';
+      el.style.backgroundImage = `radial-gradient(circle, hsl(174 100% 39%), hsl(174 100% 39% / 0.3))`;
+      el.style.borderRadius = '50%';
+      el.style.border = '2px solid hsl(174 100% 39%)';
+      el.style.boxShadow = '0 0 20px hsl(174 100% 39% / 0.5)';
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      // Add click handler
+      el.addEventListener('click', () => {
+        handleLocationGuess(coord.id);
+      });
+      
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([coord.lng, coord.lat])
+        .setPopup(
+          new mapboxgl.Popup({ offset: 25, closeButton: false })
+            .setHTML(`<div class="text-center p-2"><strong>${coord.name}</strong><br/><span class="text-xs">Click marker to select</span></div>`)
+        )
+        .addTo(map.current!);
+
+      // Show popup on hover
+      el.addEventListener('mouseenter', () => marker.togglePopup());
+      el.addEventListener('mouseleave', () => marker.togglePopup());
+    });
 
     return () => {
       map.current?.remove();

@@ -1,291 +1,223 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Play, Pause, Volume2, Eye, EyeOff, Info } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { MorseCodeGenerator } from "@/utils/morseCodeGenerator";
+import { Play, Volume2 } from "lucide-react";
+import { generateMorseAudio } from "@/utils/morseCodeGenerator";
 
 interface SIGINTSoundLabProps {
   onComplete?: () => void;
 }
 
-const morseCodeReference: Record<string, string> = {
-  'A': '·─', 'B': '─···', 'C': '─·─·', 'D': '─··', 'E': '·',
-  'F': '··─·', 'G': '──·', 'H': '····', 'I': '··', 'J': '·───',
-  'K': '─·─', 'L': '·─··', 'M': '──', 'N': '─·', 'O': '───',
-  'P': '·──·', 'Q': '──·─', 'R': '·─·', 'S': '···', 'T': '─',
-  'U': '··─', 'V': '···─', 'W': '·──', 'X': '─··─', 'Y': '─·──',
-  'Z': '──··', '0': '─────', '1': '·────', '2': '··───',
-  '3': '···──', '4': '····─', '5': '·····', '6': '─····',
-  '7': '──···', '8': '───··', '9': '────·'
+const morseCodeMap: Record<string, string> = {
+  'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+  'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+  'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+  'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+  'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---',
+  '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+  '8': '---..', '9': '----.', ' ': '/'
 };
 
 const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
-  const [userAnswer, setUserAnswer] = useState("");
+  const secretMessage = "SCORC";
+  const [userInput, setUserInput] = useState("");
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playbackRate, setPlaybackRate] = useState(1);
-  const [showMorseVisual, setShowMorseVisual] = useState(true);
-  const [showBrief, setShowBrief] = useState(true);
-  const [showReference, setShowReference] = useState(false);
-  const [currentPlayingIndex, setCurrentPlayingIndex] = useState(-1);
-  const morseGeneratorRef = useRef<MorseCodeGenerator | null>(null);
-  const stopPlayingRef = useRef(false);
+  const [currentMorseDisplay, setCurrentMorseDisplay] = useState<string>("");
+  const [playbackSpeed, setPlaybackSpeed] = useState<'slow' | 'medium' | 'fast'>('slow');
   const { toast } = useToast();
+  const audioContextRef = useRef<AudioContext | null>(null);
 
-  const correctAnswer = "SOSARC";
-  
-  const morsePattern = [
-    { letter: "S", code: "···" },
-    { letter: "O", code: "───" },
-    { letter: "S", code: "···" },
-    { letter: "A", code: "·─" },
-    { letter: "R", code: "·─·" },
-    { letter: "C", code: "─·─·" },
-  ];
+  const morseSequence = secretMessage.split('').map(char => morseCodeMap[char]).join(' ');
 
   useEffect(() => {
-    if (!morseGeneratorRef.current) {
-      morseGeneratorRef.current = new MorseCodeGenerator();
-    }
+    audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
   }, []);
 
-  const handlePlayPause = async () => {
-    if (isPlaying) {
-      stopPlayingRef.current = true;
-      setIsPlaying(false);
-      setCurrentPlayingIndex(-1);
-      return;
-    }
-
-    stopPlayingRef.current = false;
+  const playMorseCode = async () => {
+    if (!audioContextRef.current || isPlaying) return;
+    
     setIsPlaying(true);
-    const generator = morseGeneratorRef.current;
-    if (generator) {
-      try {
-        for (let i = 0; i < correctAnswer.length; i++) {
-          if (stopPlayingRef.current) break;
-          setCurrentPlayingIndex(i);
-          await generator.playMorseCode(correctAnswer[i], playbackRate);
-          await new Promise(resolve => setTimeout(resolve, 300 / playbackRate));
-        }
-        setIsPlaying(false);
-        setCurrentPlayingIndex(-1);
-      } catch (error) {
-        console.error("Error playing morse code:", error);
-        setIsPlaying(false);
-        setCurrentPlayingIndex(-1);
-        toast({
-          title: "Audio Error",
-          description: "Failed to play morse code. Please try again.",
-          variant: "destructive",
-        });
-      }
-    }
-  };
+    setCurrentMorseDisplay("");
+    
+    const speedMultipliers = {
+      slow: 0.5,
+      medium: 1.0,
+      fast: 1.5
+    };
 
-  const handleSlowDown = () => {
-    const newRate = playbackRate === 1 ? 0.5 : playbackRate === 0.5 ? 0.25 : 1;
-    setPlaybackRate(newRate);
-    toast({
-      title: `Playback speed: ${newRate}x`,
-      description: newRate < 1 ? "Audio slowed down for easier analysis" : "Normal speed",
-    });
+    try {
+      await generateMorseAudio(
+        audioContextRef.current,
+        secretMessage,
+        speedMultipliers[playbackSpeed],
+        (morseChar: string) => {
+          setCurrentMorseDisplay(prev => prev + morseChar + " ");
+        }
+      );
+    } catch (error) {
+      console.error("Error playing morse code:", error);
+    } finally {
+      setIsPlaying(false);
+    }
   };
 
   const handleSubmit = () => {
-    if (userAnswer.toUpperCase().trim() === correctAnswer) {
+    if (userInput.toUpperCase().trim() === secretMessage) {
       toast({
-        title: "✓ Correct!",
-        description: "You've successfully decoded the SIGINT transmission!",
+        title: "✓ Transmission Decoded!",
+        description: "You've successfully decrypted the SIGINT message.",
       });
-      
-      if (onComplete) {
-        onComplete();
-      }
+      if (onComplete) onComplete();
     } else {
       toast({
-        title: "Incorrect",
-        description: "Try listening to the audio again and analyzing the morse code pattern.",
+        title: "Incorrect Decoding",
+        description: "Listen carefully to the Morse code patterns. Use the reference table.",
         variant: "destructive",
       });
     }
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="text-center space-y-4">
-        <h2 className="text-4xl font-bold">SIGINT Sound Lab</h2>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <Volume2 className="h-8 w-8 text-primary" />
+          <h2 className="text-4xl font-bold">SIGINT Sound Lab</h2>
+        </div>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Intercept and decode classified audio transmissions. Listen carefully to the morse code signal and identify the message.
+          Intercept and decode Morse code transmissions to extract classified intelligence
         </p>
       </div>
 
-      {showBrief && (
-        <Alert className="bg-primary/5 border-primary/20">
-          <Info className="h-4 w-4" />
-          <AlertDescription className="space-y-2">
-            <div className="flex items-start justify-between">
-              <div className="space-y-2 flex-1">
-                <p className="font-semibold">Understanding Morse Code Audio:</p>
-                <p className="text-sm">
-                  Morse code consists of <strong>dots (·)</strong> and <strong>dashes (─)</strong>:
-                </p>
-                <ul className="text-sm space-y-1 ml-4">
-                  <li>• <strong>Dot (·)</strong>: A short beep sound</li>
-                  <li>• <strong>Dash (─)</strong>: A longer beep sound (3x the length of a dot)</li>
-                  <li>• <strong>Gaps</strong>: Short pauses between dots/dashes, longer pauses between letters</li>
-                </ul>
-                <p className="text-sm">
-                  Listen carefully to distinguish between short and long beeps. Use the reference table below to match sounds to letters.
-                </p>
+      <div className="grid lg:grid-cols-[1.2fr,1fr] gap-6">
+        {/* Left Panel - Audio Player & Input */}
+        <div className="space-y-6">
+          {/* Audio Player Card */}
+          <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large">
+            <CardHeader>
+              <CardTitle>Intercepted Transmission</CardTitle>
+              <CardDescription>Play the audio signal to decode the message</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Play Button */}
+              <div className="flex justify-center">
+                <Button
+                  onClick={playMorseCode}
+                  disabled={isPlaying}
+                  size="lg"
+                  className="w-full max-w-sm h-16 text-lg gap-3 bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow"
+                >
+                  <Play className="h-6 w-6" />
+                  {isPlaying ? "Transmitting..." : "Play Transmission"}
+                </Button>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowBrief(false)}
-                className="ml-4"
-              >
-                <EyeOff className="h-4 w-4" />
-              </Button>
-            </div>
-          </AlertDescription>
-        </Alert>
-      )}
 
-      {!showBrief && (
-        <div className="text-center">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowBrief(true)}
-            className="gap-2"
-          >
-            <Info className="h-4 w-4" />
-            Show Morse Code Brief
-          </Button>
-        </div>
-      )}
+              {/* Playback Speed */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium">Playback Speed:</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {(['slow', 'medium', 'fast'] as const).map((speed) => (
+                    <Button
+                      key={speed}
+                      onClick={() => setPlaybackSpeed(speed)}
+                      variant={playbackSpeed === speed ? "default" : "outline"}
+                      className={playbackSpeed === speed ? "bg-primary text-primary-foreground" : ""}
+                    >
+                      {speed.charAt(0).toUpperCase() + speed.slice(1)}
+                    </Button>
+                  ))}
+                </div>
+              </div>
 
-      <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Volume2 className="h-5 w-5" />
-            Audio Transmission
-          </CardTitle>
-          <CardDescription>
-            Intercepted signal from unknown source. Decode the message.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex flex-wrap gap-3">
-            <Button
-              onClick={handlePlayPause}
-              className="gap-2 bg-primary hover:bg-primary/90"
-            >
-              {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              {isPlaying ? "Pause" : "Play Audio"}
-            </Button>
-            
-            <Button
-              onClick={handleSlowDown}
-              variant="outline"
-              className="gap-2"
-            >
-              <Volume2 className="h-4 w-4" />
-              Speed: {playbackRate}x
-            </Button>
-
-            <Button
-              onClick={() => setShowMorseVisual(!showMorseVisual)}
-              variant="outline"
-              className="gap-2"
-            >
-              {showMorseVisual ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              {showMorseVisual ? "Hide" : "Show"} Visual
-            </Button>
-
-            <Button
-              onClick={() => setShowReference(!showReference)}
-              variant="outline"
-              className="gap-2"
-            >
-              {showReference ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              {showReference ? "Hide" : "Show"} Reference
-            </Button>
-          </div>
-
-          {showMorseVisual && (
-            <div className="p-6 bg-muted/20 rounded-lg border border-border">
-              <div className="text-sm text-muted-foreground mb-3 font-mono">TRANSMISSION:</div>
-              <div className="flex flex-wrap gap-4 items-center justify-center min-h-[60px]">
-                {morsePattern.map((item, index) => (
-                  <div 
-                    key={index}
-                    className={`transition-all duration-300 ${
-                      currentPlayingIndex === index 
-                        ? 'scale-110 opacity-100' 
-                        : currentPlayingIndex > index
-                        ? 'opacity-100'
-                        : 'opacity-30'
-                    }`}
-                  >
-                    <div className="text-center space-y-2">
-                      <div className={`text-3xl font-mono tracking-wider ${
-                        currentPlayingIndex === index ? 'text-primary animate-pulse' : 'text-foreground'
-                      }`}>
-                        {item.code}
-                      </div>
-                      <div className={`text-xs font-mono ${
-                        currentPlayingIndex >= index ? 'text-muted-foreground' : 'text-transparent'
-                      }`}>
-                        {currentPlayingIndex >= index ? item.letter : '?'}
-                      </div>
+              {/* Visual Display */}
+              <Card className="bg-muted/30 border-primary/20 min-h-[120px] flex items-center justify-center p-6">
+                <div className="text-center space-y-3">
+                  <p className="text-sm text-muted-foreground font-medium">Real-time Morse Visual</p>
+                  {currentMorseDisplay ? (
+                    <div className="font-mono text-2xl text-primary tracking-wider animate-pulse-glow">
+                      {currentMorseDisplay}
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+                  ) : (
+                    <p className="text-muted-foreground">Press play to see visual Morse code</p>
+                  )}
+                </div>
+              </Card>
 
-          {showReference && (
-            <div className="p-6 bg-muted/20 rounded-lg border border-border">
-              <div className="text-sm font-semibold mb-4">Morse Code Reference Table:</div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-3">
-                {Object.entries(morseCodeReference).map(([letter, code]) => (
-                  <div key={letter} className="text-center p-2 bg-background/50 rounded border border-border/50">
-                    <div className="font-bold text-lg">{letter}</div>
-                    <div className="font-mono text-sm text-muted-foreground">{code}</div>
-                  </div>
-                ))}
+              {/* Transmission Info */}
+              <div className="space-y-2 text-sm text-muted-foreground font-mono">
+                <div className="flex justify-between">
+                  <span>Duration:</span>
+                  <span>~{playbackSpeed === 'slow' ? '15' : playbackSpeed === 'medium' ? '10' : '7'}s</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Frequency:</span>
+                  <span>800 Hz</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Pattern:</span>
+                  <span>Morse Code</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Speed:</span>
+                  <span className="capitalize">{playbackSpeed}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Origin:</span>
+                  <span>Unknown</span>
+                </div>
               </div>
-            </div>
-          )}
+            </CardContent>
+          </Card>
 
-          <div className="space-y-3">
-            <label className="text-sm font-medium">Your Decoded Message:</label>
-            <div className="flex gap-2">
+          {/* Decoder Input Card */}
+          <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large">
+            <CardHeader>
+              <CardTitle>Decode Message</CardTitle>
+              <CardDescription>Enter the decoded text from the Morse transmission</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <Input
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-                placeholder="Enter decoded message..."
-                className="flex-1 bg-background font-mono uppercase"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                placeholder="Enter decoded text..."
+                className="bg-background font-mono text-lg h-12"
                 onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
               />
               <Button 
-                onClick={handleSubmit}
-                className="bg-primary hover:bg-primary/90"
+                onClick={handleSubmit} 
+                className="w-full h-12 text-lg bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow"
               >
-                Submit
+                Submit Decoding
               </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Panel - Morse Code Reference (Always Visible) */}
+        <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large h-fit sticky top-6">
+          <CardHeader>
+            <CardTitle>Morse Code Reference</CardTitle>
+            <CardDescription>International Morse Code alphabet</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 gap-3 font-mono text-sm">
+              {Object.entries(morseCodeMap).filter(([key]) => key !== ' ').map(([letter, code]) => (
+                <div key={letter} className="flex items-center justify-between p-2 rounded bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <span className="font-bold text-foreground">{letter}:</span>
+                  <span className="text-primary tracking-wider">{code}</span>
+                </div>
+              ))}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Hint: The message is 6 letters long
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

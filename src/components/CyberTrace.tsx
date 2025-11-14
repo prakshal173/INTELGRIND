@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { Terminal, MessageSquare, Search } from "lucide-react";
+import { Terminal, MessageSquare, Search, Target } from "lucide-react";
 
 interface CyberTraceProps {
   onComplete?: () => void;
@@ -77,9 +77,12 @@ const CyberTrace = ({ onComplete }: CyberTraceProps = {}) => {
   };
 
   return (
-    <div id="cyber-trace" className="space-y-8">
+    <div id="cyber-trace" className="space-y-6">
       <div className="text-center space-y-4">
-        <h2 className="text-4xl font-bold">Cyber Trace Investigation</h2>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <Terminal className="h-8 w-8 text-primary" />
+          <h2 className="text-4xl font-bold">Cyber Trace Investigation</h2>
+        </div>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Analyze system logs and internal communications to identify the threat actor and locate the compromised beacon.
         </p>
@@ -107,7 +110,7 @@ const CyberTrace = ({ onComplete }: CyberTraceProps = {}) => {
                     <div key={index} className="p-3 rounded bg-muted/30 hover:bg-muted/50 transition-colors border border-border/50">
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
                         <span className="text-muted-foreground">{log.time}</span>
-                        <span className="text-accent font-semibold">{log.ip}</span>
+                        <span className="text-primary font-semibold">{log.ip}</span>
                       </div>
                       <div className="text-foreground">{log.message}</div>
                     </div>
@@ -123,7 +126,7 @@ const CyberTrace = ({ onComplete }: CyberTraceProps = {}) => {
                     <div key={index} className="p-3 rounded bg-muted/30 hover:bg-muted/50 transition-colors border border-border/50">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs text-muted-foreground font-mono">{msg.time}</span>
-                        <span className="font-semibold text-primary">{msg.user}</span>
+                        <span className="font-semibold text-accent">{msg.user}</span>
                       </div>
                       <div className="text-foreground">{msg.message}</div>
                     </div>
@@ -137,19 +140,70 @@ const CyberTrace = ({ onComplete }: CyberTraceProps = {}) => {
 
       <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large">
         <CardHeader>
-          <CardTitle>Submit Your Analysis</CardTitle>
+          <CardTitle>Investigation Report</CardTitle>
           <CardDescription>Identify the threat actor username and the compromised beacon IP address</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Threat Actor Username:</label>
-            <Input value={actorInput} onChange={(e) => setActorInput(e.target.value)} placeholder="Enter username..." className="bg-background font-mono" />
+            <label className="text-sm font-medium">Question 1: Who mentioned "gateway 27"?</label>
+            <Input 
+              value={actorInput} 
+              onChange={(e) => setActorInput(e.target.value)} 
+              placeholder="Enter username..." 
+              className="bg-background font-mono" 
+            />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Compromised Beacon IP:</label>
-            <Input value={beaconInput} onChange={(e) => setBeaconInput(e.target.value)} placeholder="Enter IP address..." className="bg-background font-mono" />
+            <label className="text-sm font-medium">Question 2: Which host triggered beacon activity?</label>
+            <Input 
+              value={beaconInput} 
+              onChange={(e) => setBeaconInput(e.target.value)} 
+              placeholder="Enter IP address..." 
+              className="bg-background font-mono" 
+            />
           </div>
-          <Button onClick={handleSubmit} className="w-full bg-primary hover:bg-primary/90 mt-4">Submit Investigation</Button>
+          <Button 
+            onClick={handleSubmit} 
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mt-4 h-12 text-lg shadow-glow"
+          >
+            Submit Investigation
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Mission Objectives Section */}
+      <Card className="bg-card/50 backdrop-blur-sm border-border shadow-large">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Target className="h-5 w-5" />
+            Mission Objectives
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span className="text-primary mt-1">•</span>
+              <span>Identify the suspect who used gateway 27</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary mt-1">•</span>
+              <span>Locate the IP address generating beacon traffic</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary mt-1">•</span>
+              <span>Cross-reference logs with chat communications</span>
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
+
+      {/* Hint Section */}
+      <Card className="bg-primary/5 border-primary/20">
+        <CardContent className="pt-6">
+          <p className="text-sm text-primary">
+            <span className="font-bold">Hint:</span> Look for connections between the chat messages and system logs. 
+            Pay attention to timestamps and specific keywords like "gateway 27" and "beacon".
+          </p>
         </CardContent>
       </Card>
     </div>
