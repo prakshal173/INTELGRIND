@@ -26,6 +26,7 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentMorseDisplay, setCurrentMorseDisplay] = useState<string>("");
   const [playbackSpeed, setPlaybackSpeed] = useState<'slow' | 'medium' | 'fast'>('slow');
+  const [showMorseVisual, setShowMorseVisual] = useState(true);
   const { toast } = useToast();
   const audioContextRef = useRef<AudioContext | null>(null);
 
@@ -159,19 +160,33 @@ const SIGINTSoundLab = ({ onComplete }: SIGINTSoundLabProps = {}) => {
                 </div>
               </div>
 
+              {/* Visual Display Toggle */}
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Visual Morse Display:</label>
+                <Button
+                  onClick={() => setShowMorseVisual(!showMorseVisual)}
+                  variant="outline"
+                  size="sm"
+                >
+                  {showMorseVisual ? "Hide" : "Show"}
+                </Button>
+              </div>
+
               {/* Visual Display */}
-              <Card className="bg-muted/30 border-primary/20 min-h-[120px] flex items-center justify-center p-6">
-                <div className="text-center space-y-3">
-                  <p className="text-sm text-muted-foreground font-medium">Real-time Morse Visual</p>
-                  {currentMorseDisplay ? (
-                    <div className="font-mono text-2xl text-primary tracking-wider">
-                      {currentMorseDisplay}
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground">Press play to see visual Morse code</p>
-                  )}
-                </div>
-              </Card>
+              {showMorseVisual && (
+                <Card className="bg-muted/30 border-primary/20 min-h-[120px] flex items-center justify-center p-6">
+                  <div className="text-center space-y-3">
+                    <p className="text-sm text-muted-foreground font-medium">Real-time Morse Visual</p>
+                    {currentMorseDisplay ? (
+                      <div className="font-mono text-2xl text-primary tracking-wider">
+                        {currentMorseDisplay}
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground">Press play to see visual Morse code</p>
+                    )}
+                  </div>
+                </Card>
+              )}
 
               {/* Transmission Info */}
               <div className="space-y-2 text-sm text-muted-foreground font-mono">
