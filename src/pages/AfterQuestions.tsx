@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const questions = [
   "A government's duty to protect its citizens from foreign threats is more important than an individual's absolute right to privacy.",
@@ -37,7 +38,7 @@ const AfterQuestions = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (Object.keys(answers).length === 5) {
       const afterAnswersArray = [answers[0], answers[1], answers[2], answers[3], answers[4]];
       localStorage.setItem('afterAnswers', JSON.stringify(afterAnswersArray));
@@ -48,16 +49,14 @@ const AfterQuestions = () => {
         const beforeAnswers = JSON.parse(beforeAnswersStr);
         const userChanged = beforeAnswers.some((ans: boolean, idx: number) => ans !== afterAnswersArray[idx]);
         
-        // Update poll data
-        const storedData = localStorage.getItem('pollData');
-        const currentData = storedData ? JSON.parse(storedData) : { changedCount: 0, sameCount: 0 };
-        
-        const newData = {
-          changedCount: currentData.changedCount + (userChanged ? 1 : 0),
-          sameCount: currentData.sameCount + (userChanged ? 0 : 1)
-        };
-        
-        localStorage.setItem('pollData', JSON.stringify(newData));
+        // Store result in Supabase for aggregated tracking
+        const { error } = await supabase
+          .from('poll_results')
+          .insert([{ perspective_changed: userChanged }]);
+
+        if (error) {
+          console.error('Error storing poll result:', error);
+        }
 
         toast({
           title: "Assessment Complete",
