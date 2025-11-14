@@ -51,8 +51,27 @@ const Dashboard = () => {
     const afterAnswers = localStorage.getItem('afterAnswers');
     const completedModules = localStorage.getItem('completedModules');
     
+    // Only show completed state if all three are present AND have valid data
     if (beforeAnswers && afterAnswers && completedModules === 'all') {
-      setHasCompletedJourney(true);
+      try {
+        const beforeData = JSON.parse(beforeAnswers);
+        const afterData = JSON.parse(afterAnswers);
+        // Verify the data is actually valid (not empty objects)
+        if (beforeData && Object.keys(beforeData).length > 0 && 
+            afterData && Object.keys(afterData).length > 0) {
+          setHasCompletedJourney(true);
+        } else {
+          // Clear invalid data
+          localStorage.removeItem('beforeAnswers');
+          localStorage.removeItem('afterAnswers');
+          localStorage.removeItem('completedModules');
+        }
+      } catch (e) {
+        // If parsing fails, clear everything
+        localStorage.removeItem('beforeAnswers');
+        localStorage.removeItem('afterAnswers');
+        localStorage.removeItem('completedModules');
+      }
     }
 
     return () => {

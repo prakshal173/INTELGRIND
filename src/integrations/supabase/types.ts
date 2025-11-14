@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      poll_results: {
+        Row: {
+          created_at: string
+          id: string
+          perspective_changed: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          perspective_changed: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          perspective_changed?: boolean
+        }
+        Relationships: []
+      }
       suggestions: {
         Row: {
           created_at: string
